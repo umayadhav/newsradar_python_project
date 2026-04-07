@@ -1,0 +1,45 @@
+{% extends 'news/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="section-title">⭐ My Favourites
+        <span style="font-size:0.9rem; color:#666; font-weight:400;">{{ articles|length }} saved</span>
+    </div>
+
+    {% if not articles %}
+    <div class="empty-state">
+        <i class="fas fa-star"></i>
+        <h4>No favourites yet</h4>
+        <p>Browse news and click ⭐ Save to add articles here.</p>
+        <a href="/" style="color:#e94560; text-decoration:none; font-weight:600;">Browse Headlines →</a>
+    </div>
+    {% else %}
+    <div class="row g-4 mb-5">
+        {% for article in articles %}
+        <div class="col-md-6 col-lg-4">
+            <div class="news-card">
+                <div class="d-flex align-items-center mb-2">
+                    <span class="card-source">
+                        <i class="fas fa-circle" style="font-size:6px;"></i>
+                        {{ article.source }}
+                    </span>
+                </div>
+                <div class="card-title">{{ article.title }}</div>
+                <div class="card-desc">{{ article.description|truncatechars:110 }}</div>
+                <div class="card-footer-row">
+                    <a href="{{ article.url }}" target="_blank" class="btn-read">
+                        Read Article <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="/favourite/remove/{{ forloop.counter0 }}/"
+                       style="color:#555; font-size:0.8rem; text-decoration:none; border:1px solid rgba(255,255,255,0.08); padding:5px 12px; border-radius:8px; transition:all 0.2s;"
+                       onmouseover="this.style.color='#e94560'; this.style.borderColor='#e94560';"
+                       onmouseout="this.style.color='#555'; this.style.borderColor='rgba(255,255,255,0.08)';">
+                        🗑️ Remove
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

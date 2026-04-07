@@ -1,0 +1,80 @@
+{% extends 'news/base.html' %}
+{% block content %}
+
+<!-- Hero -->
+<div class="hero text-center">
+    <div class="container">
+        <h1>Stay Informed.<br>Stay Ahead.</h1>
+        <p>Live news from top sources around the world — curated for you.</p>
+        <div class="search-wrapper">
+            <form action="/search/" method="GET" style="display:contents;">
+                <input type="text" name="q" placeholder="Search any topic, keyword, event...">
+                <button type="submit"><i class="fas fa-search me-1"></i> Search</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Category Pills -->
+    <div class="category-pills">
+        <a href="/" class="pill active">🌍 All Headlines</a>
+        <a href="/category/technology/" class="pill">💻 Technology</a>
+        <a href="/category/sports/" class="pill">🏏 Sports</a>
+        <a href="/category/business/" class="pill">💰 Business</a>
+        <a href="/digest/" class="pill">📋 Daily Digest</a>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+        <div class="stat-item">Articles loaded: <span>{{ articles|length }}</span></div>
+        <div class="stat-item">Source: <span>Live API</span></div>
+        <div class="stat-item">Updated: <span>Just Now</span></div>
+    </div>
+
+    <!-- Section Title -->
+    <div class="section-title">🌍 Top Headlines</div>
+
+    <!-- News Grid -->
+    <div class="row g-4 mb-5">
+        {% for article in articles %}
+        <div class="col-md-6 col-lg-4">
+            <div class="news-card">
+                <div class="d-flex align-items-center mb-2">
+                    <span class="card-source">
+                        <i class="fas fa-circle" style="font-size:6px;"></i>
+                        {{ article.source }}
+                    </span>
+                    <span class="card-date ms-auto">{{ article.format_date }}</span>
+                </div>
+                <div class="card-title">{{ article.title }}</div>
+                <div class="card-desc">{{ article.description|truncatechars:110 }}</div>
+                <div class="card-footer-row">
+                    <a href="{{ article.url }}" target="_blank" class="btn-read">
+                        Read Article <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <form method="POST" action="/favourite/add/" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="title"        value="{{ article.title }}">
+                        <input type="hidden" name="description"  value="{{ article.description }}">
+                        <input type="hidden" name="url"          value="{{ article.url }}">
+                        <input type="hidden" name="source"       value="{{ article.source }}">
+                        <input type="hidden" name="author"       value="{{ article.author }}">
+                        <input type="hidden" name="published_at" value="{{ article.published_at }}">
+                        <input type="hidden" name="category"     value="{{ article.category }}">
+                        <input type="hidden" name="next"         value="{{ request.path }}">
+                        <button type="submit" class="btn-save">⭐ Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <i class="fas fa-satellite-dish"></i>
+            <h4>No articles found</h4>
+            <p>Check your API key or internet connection.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

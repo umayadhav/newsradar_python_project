@@ -1,0 +1,32 @@
+{% extends 'news/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="section-title">📋 Daily Digest</div>
+    <p style="color:#666; margin-bottom:25px;">{{ date }}</p>
+
+    {% for article in articles %}
+    <div class="digest-card">
+        <div class="digest-number">{{ forloop.counter }}</div>
+        <div style="flex:1;">
+            <div class="card-title">{{ article.title }}</div>
+            <div style="margin-bottom:8px;">
+                <span class="card-source">
+                    <i class="fas fa-circle" style="font-size:6px;"></i>
+                    {{ article.source }}
+                </span>
+                <span class="card-date ms-2">{{ article.format_date }}</span>
+            </div>
+            <div class="card-desc">{{ article.description|truncatechars:180 }}</div>
+            <a href="{{ article.url }}" target="_blank" class="btn-read">
+                Read Full Article <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+        <i class="fas fa-newspaper"></i>
+        <h4>No digest available</h4>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
